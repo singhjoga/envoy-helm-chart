@@ -1,19 +1,22 @@
+{{- range $s := .Values.services }}
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "envoy.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  name: {{ $s.name }}
+  namespace: {{ $.Release.Namespace }}
   labels:
-    {{- include "envoy.labels" . | nindent 4 }}
-{{- with .Values.service.annotations }}
+    {{- include "envoy.labels" $ | nindent 4 }}
+{{- with $s.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
 {{- end }}
 spec:
-  type: {{ .Values.service.type }}
-  ports: {{ .Values.service.ports | toYaml | nindent 4 }}
-  {{- with .Values.service.loadBalancerIP }}
+  type: {{ $s.type }}
+  ports: {{ $s.ports | toYaml | nindent 4 }}
+  {{- with $s.loadBalancerIP }}
   loadBalancerIP: {{ . }}
   {{- end }}
   selector:
-    {{- include "envoy.selectorLabels" . | nindent 4 }}
+    {{- include "envoy.selectorLabels" $ | nindent 4 }}
+{{- end }}

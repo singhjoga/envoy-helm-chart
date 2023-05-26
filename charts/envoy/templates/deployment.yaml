@@ -27,7 +27,7 @@ spec:
     {{- if .Values.initContainer.enabled  }}
       initContainers:
         - name: preprocess-config
-          image: "{{ .Values.initContainer.image.repository }}:{{ .Values.initContainer.image.tag }}"
+          image: "{{ .Values.global.imageRegistry }}/{{ .Values.initContainer.image.repository }}:{{ .Values.initContainer.image.tag }}"
           imagePullPolicy: {{ .Values.initContainer.image.pullPolicy }}
           args:
             - sh
@@ -46,7 +46,7 @@ spec:
     {{- end }}
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ include "envoy.tag" . }}"
+          image: "{{ .Values.global.imageRegistry }}/{{ .Values.image.repository }}:{{ include "envoy.tag" . }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           args:
             - -c
